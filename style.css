@@ -1,0 +1,650 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+/* ================= UNIFORM NAVBAR ================= */
+
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+
+    animation: navDrop 0.8s ease;
+    z-index: 1000;
+}
+
+body {
+    padding-top: 70px;
+}
+
+/* NAV ANIMATION */
+@keyframes navDrop {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* BRAND NAME */
+.brand {
+    font-size: 22px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 2px;
+}
+
+/* NAV LINKS */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    position: relative;
+    transition: 0.3s ease;
+}
+
+/* UNDERLINE ANIMATION */
+nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0%;
+    height: 2px;
+    background: white;
+    transition: 0.3s ease;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+/* BUTTON STYLE (Login / Logout) */
+.nav-btn {
+    padding: 8px 18px;
+    border: 1px solid white;
+    border-radius: 20px;
+    transition: 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: white;
+    color: black;
+}
+
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+/* ===== NAVBAR DESIGN ===== */
+
+header {
+    background: rgb(243, 243, 243);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* PAGE TITLE */
+.page-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #111;
+}
+
+/* RIGHT NAV */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+/* NAV LINKS */
+.nav-link {
+    text-decoration: none;
+    color: #fdfdfd;
+    font-weight: 500;
+    position: relative;
+    transition: 0.3s;
+}
+
+/* HOVER EFFECT (Underline animation) */
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0%;
+    height: 2px;
+    background: black;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: black;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* LOGOUT BUTTON */
+.logout-btn {
+    background: black;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: #050505;
+}
+
+
+/* ================= GLOBAL RESET ================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    background-color: white;
+ }
+
+/* ================= LOGIN PAGE ================= */
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, rgb(0, 0, 0), rgb(31, 28, 28));
+}
+
+.login-box {
+    background: rgb(255, 236, 236);
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+}
+
+.login-box input,
+.login-box button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.login-box button {
+    background: rgb(255, 255, 255);
+    color: rgb(250, 243, 243);
+    border: none;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+}
+
+/* ================= HEADER ================= */
+
+header {
+    background: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    padding:25px;
+    text-align: left;
+    font-family: 'Times New Roman', Times, serif
+}
+
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgb(252, 252, 252);
+    padding: 30px ;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+.page-title {
+    color: rgb(255, 255, 255);
+    margin: 3;
+}
+
+
+
+/* ================= CATEGORY GRID ================= */
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    padding: 50px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.category-card {
+    background: rgb(252, 252, 252);
+    border-radius: 30px;
+    box-shadow: 0 5px 2px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    padding: 20px;
+    text-decoration: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: black;
+    transition: 0.3s;
+}
+
+.category-card img {
+    width: 90%;
+    height:250px;
+    object-fit: cover;
+    border-radius: 30px;
+}
+
+.category-card h3 {
+    margin-top: 15px;
+}
+
+.category-card:hover {
+    transform: translateY(-6px);
+}
+
+
+
+/* ================= PRODUCT GRID FIXED ================= */
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* FORCE SAME CARD HEIGHT */
+.card {
+    background: rgb(255, 255, 255);
+    border-radius: 20px;
+    box-shadow: 0 5px 2px rgba(22, 22, 22, 0.15);
+    padding: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* UNIFORM IMAGE SIZE */
+.product-img {
+    width: 100%;
+    height: 250px;        /* ALL same height */
+    object-fit: cover;    /* Crop instead of stretch */
+    border-radius: 8px;
+    display: block;
+}
+
+/* HEADER RIGHT SIDE */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* CART ICON */
+.cart-icon {
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+}
+
+
+/* BUTTON STYLE */
+.card button {
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px;
+    border: none;
+    background: black;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.card button:hover {
+    background: #444;
+    transform: scale(1.05);
+}
+
+/* CARD SMOOTH ANIMATION */
+.card {
+    transition: 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    width: 350px;
+    border-radius: 10px;
+    animation: fadeIn 0.3s ease;
+}
+
+.close {
+    float: right;
+    cursor: pointer;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+
+
+
+
+/* ===================================================== */
+/* 🔥 LOGIN PAGE BACKGROUND (login.html) 🔥 */
+/* DRI KA MAN MA ILIS SANG BACKGROUND IMAGE */
+/* Ilisi ang filename sa url() */
+/* ===================================================== */
+
+.login-page {
+    background-image: url("assets/APPAREL.png"); /* <-- ILISAN ANG IMAGE DIRI */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+/* ===================================================== */
+/* 🔥 LANDING PAGE BACKGROUND (EDIT IMAGE DIRI) 🔥 */
+/* 👉 DRI KA MAG ILIS SANG IMAGE */
+/* IMPORTANT: Avoid spaces sa filename */
+/* ===================================================== */
+
+.landing-page {
+    margin: 0;
+    min-height: 100vh;
+    background: url("assets/apparel-bw.jpg") no-repeat center center;
+    background-size: cover;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/* ================= LANDING NAVBAR ================= */
+/* Animated + Fixed Navbar */
+
+.landing-header {
+    position: fixed; /* para always ara sa babaw */
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
+
+    animation: slideDown 0.8s ease forwards;
+}
+
+/* NAVBAR SLIDE ANIMATION */
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* FIX TITLE COLOR (para indi puti) */
+.logo {
+    font-size: 26px;
+    font-weight: 800;
+    color: black; /* IMPORTANTE NI */
+}
+
+
+/* TITLE */
+.logo {
+    font-size: 24px;
+    font-weight: 800; /* BOLD */
+}
+
+/* NAV LINKS */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    opacity: 0.6;
+}
+
+/* LOGIN BUTTON STYLE (BOX) */
+.login-nav-btn {
+    padding: 8px 20px;
+    border: 2px solid black;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.login-nav-btn:hover {
+    background: black;
+    color: white;
+}
+
+
+/* ================= HERO CENTER CONTENT ================= */
+
+/* ================= HERO CENTER CONTENT ================= */
+
+.hero-content h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.hero-content p {
+    font-size: 18px;
+}
+
+
+/* ================= HERO SECTION ================= */
+/* 👉 DRI KA MAG ILIS SANG HERO BACKGROUND IMAGE */
+
+.hero {
+    position: relative;
+    height: 100vh;
+
+    background: url("./assets/apparel b & w.jpg") no-repeat center center;
+    background-size: cover;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* DARK OVERLAY + BLUR EFFECT */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px);
+}
+
+/* CONTENT ABOVE OVERLAY */
+.hero-content {
+    position: relative;
+    color: white;
+    z-index: 2;
+}
+
+.hero-content h1 {
+    font-size: 60px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.hero-content p {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+
+/* ================= PAGE LOAD ANIMATION ================= */
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeDrop 1s ease forwards;
+}
+
+@keyframes fadeDrop {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ================= ABOUT & SIGNUP CARD ================= */
+
+.glass-box {
+    background: rgba(255,255,255,0.08);
+    padding: 50px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    max-width: 600px;
+    margin: auto;
+}
+
+.glass-box h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.glass-box p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+
+/* ================= FORM DESIGN ================= */
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+
+.form-btn {
+    padding: 12px 25px;
+    border: none;
+    background: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+    border-radius: 25px;
+}
+
+.form-btn:hover {
+    background: black;
+    color: white;
+}
+
+
+
+.cart-item{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    background:#f4f4f4;
+    padding:15px;
+    margin:10px;
+    border-radius:10px;
+}
+
+.cart-img{
+    width:100px;
+    height:100px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+.cart-item{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    background:#f4f4f4;
+    padding:15px;
+    margin:10px;
+    border-radius:10px;
+}
+
+.cart-img{
+    width:100px;
+    height:100px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+

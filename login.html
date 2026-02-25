@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - Chester Clothing</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ===================================================== */
+        /* 🔥 LOGIN PAGE BACKGROUND IMAGE 🔥                    */
+        /* 👉 DRI KA MAN MA ILIS SANG PICTURE                   */
+        /* Ilisi lang ang filename sulod sang url("")           */
+        /* ===================================================== */
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background-image: url("./assets/apparel.png");
+            /* 🔥 ILISAN ANG "login-bg.jpg" DIRI 🔥 */
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+
+</head>
+
+<header>
+    <div class="brand">CHESTER APPAREL</div>
+
+    <nav>
+        <a href="index.html">Main Page</a>
+       
+        
+    </nav>
+</header>
+
+<body>
+
+    <div class="card" style="width:300px; backdrop-filter: blur(5px);background: rgba(250, 250, 250, 0.8);">
+        <h2>Login</h2>
+        <br>
+        <input type="text" id="username" placeholder="Username" style="width:100%;padding:8px;"><br><br>
+        <input type="password" id="password" placeholder="Password" style="width:100%;padding:8px;"><br><br>
+        <button onclick="login()" style="width:100%;">Login</button>
+    </div>
+
+<script>
+function login(){
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    if(username && password){
+        localStorage.setItem("isLoggedIn", "true");
+        window.location.href = "home.html";
+    } else {
+        alert("Please enter username and password");
+    }
+}
+</script>
+
+</body>
+</html>

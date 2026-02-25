@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - Chester Clothing</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+
+<header>
+
+    <div class="page-title">
+        Home
+    </div>
+
+    <nav class="nav-right">
+        <a href="about.html">About</a>
+        <a href="cart.html" class="nav-link">
+          🛒  Cart <span id="cart-count">0</span>
+        </a>
+          <a href="login.html" class="nav-link">
+            Log out 
+        </a>
+    </nav>
+
+</header>
+
+<section class="hero">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <h1>Welcome Back</h1>
+        <p>Choose your category below</p>
+    </div>
+
+</section>
+
+
+<section class="categories">
+
+    <a href="tshirts.html" class="category-card">
+        <img src="assets/black tshirt.jpg">
+        <h3>T-Shirts</h3>
+    </a>
+
+  <a href="jeans.html" class="category-card">
+    <img src="assets/jeans.jpg">
+    <h3>Jeans</h3>
+</a>
+
+<a href="caps.html" class="category-card">
+    <img src="assets/black-baseball-cap-classic-style-versatile-wear_191095-80307.jpg">
+    <h3>Caps</h3>
+</a>
+
+<a href="socks.html" class="category-card">
+    <img src="assets/socks.jpg">
+    <h3>Socks</h3>
+</a>
+
+
+
+
+</section>
+
+
+
+
+<!-- JAVASCRIPT ALWAYS AT BOTTOM -->
+<script>
+
+// 🔐 PROTECT PAGE
+if(localStorage.getItem("isLoggedIn") !== "true"){
+    window.location.href = "login.html";
+}
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// UPDATE CART COUNT
+function updateCartCount(){
+    document.getElementById("cart-count").innerText = cart.length;
+}
+
+// ADD TO CART
+function addToCart(name, price){
+    cart.push({name:name, price:price});
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+    alert(name + " added to cart!");
+}
+
+// LOGOUT FUNCTION
+function logout(){
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "index.html";
+}
+
+updateCartCount();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Shopping Cart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="page-title">
+        Shopping Cart
+    </div>
+
+    <nav class="nav-right">
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="cart.html" class="nav-link">
+           🛒 Cart <span id="cart-count">0</span>
+        </a>
+        <button onclick="logout()" class="logout-btn">
+            Logout
+        </button>
+    </nav>
+</header>
+
+<section style="padding:40px;">
+   <h1>Your Cart</h1>
+    <br>
+
+    <div id="cart-items"></div>
+
+    <br>
+    <h3 id="cart-total"></h3>
+
+    <br>
+    <button onclick="checkout()" style="background:green;color:white;padding:10px 20px;border:none;cursor:pointer;">
+        Checkout All
+    </button>
+</section>
+
+<script>
+
+// 🔐 PROTECT PAGE
+if(localStorage.getItem("isLoggedIn") !== "true"){
+    window.location.href = "login.html";
+}
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function updateCartCount(){
+    document.getElementById("cart-count").innerText = cart.length;
+}
+
+function renderCart(){
+    const container = document.getElementById("cart-items");
+    container.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        total += item.price;
+
+        container.innerHTML += `
+            <div style="background:white;padding:15px;margin-bottom:10px;border-radius:8px;">
+                
+                ${item.image ? `
+                <img src="${item.image}" 
+                style="width:80px;height:80px;object-fit:cover;border-radius:6px;margin-bottom:10px;">
+                <br>
+                ` : ""}
+
+                <strong>${item.name}</strong> - ₱${item.price}
+                <br><br>
+
+                <button onclick="removeItem(${index})"
+                    style="background:red;color:white;border:none;padding:6px 12px;">
+                    Remove
+                </button>
+
+                <button onclick="checkoutSingle(${index})"
+                    style="background:blue;color:white;border:none;padding:6px 12px;">
+                    Checkout This
+                </button>
+            </div>
+        `;
+    });
+
+    document.getElementById("cart-total").innerText = "Total: ₱" + total;
+}
+
+function removeItem(index){
+    cart.splice(index,1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+    updateCartCount();
+}
+
+function checkoutSingle(index){
+    alert(cart[index].name + " checked out!");
+    cart.splice(index,1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+    updateCartCount();
+}
+
+function checkout(){
+    if(cart.length === 0){
+        alert("Cart is empty!");
+        return;
+    }
+
+    alert("All items checked out!");
+    cart = [];
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+    updateCartCount();
+}
+
+function logout(){
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "index.html";
+}
+
+updateCartCount();
+renderCart();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socks</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+
+    <div class="page-title">
+        Socks
+    </div>
+
+    <nav class="nav-right">
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="cart.html" class="nav-link">
+           🛒 Cart <span id="cart-count">0</span>
+        </a>
+        <a href="login.html" class="nav-link">Log out</a>
+    </nav>
+
+</header>
+
+<section class="products">
+
+    <div class="card">
+        <img src="assets/socks.jpg" class="product-img">
+        <h3>Black Socks</h3>
+        <p>₱250</p>
+        <button onclick="addToCart('Black Socks', 250)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+        <img src="assets/white socks.jpg" class="product-img">
+        <h3>White Socks</h3>
+        <p>₱300</p>
+        <button onclick="addToCart('White Socks', 300)">Add to Cart</button>
+    </div>
+
+</section>
+
+<script>
+
+if(localStorage.getItem("isLoggedIn") !== "true"){
+    window.location.href = "login.html";
+}
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function updateCartCount(){
+    document.getElementById("cart-count").innerText = cart.length;
+}
+
+function addToCart(name, price){
+    cart.push({name:name, price:price});
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+    alert(name + " added to cart!");
+}
+
+updateCartCount();
+
+</script>
+
+</body>
+</html>

@@ -1,127 +1,136 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Your Shopping Cart</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Shopping Cart</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <header>
-    <div class="page-title">
-        Shopping Cart
-    </div>
+  <div class="page-title">Shopping Cart</div>
 
-    <nav class="nav-right">
-        <a href="home.html" class="nav-link">Home</a>
-        <a href="cart.html" class="nav-link">
-           🛒 Cart <span id="cart-count">0</span>
-        </a>
-        <button onclick="logout()" class="logout-btn">
-            Logout
-        </button>
-    </nav>
+  <nav class="nav-right">
+    <a href="home.html" class="nav-link">Home</a>
+
+    <a href="cart.html" class="nav-link">
+      🛒 Cart <span id="cart-count">0</span>
+    </a>
+
+    <!-- REAL logout (Firebase) -->
+    <a href="#" id="logoutLink" class="logout-btn nav-link">Logout</a>
+  </nav>
 </header>
 
 <section style="padding:40px;">
-   <h1>Your Cart</h1>
-    <br>
+  <h1>Your Cart</h1>
+  <br>
 
-    <div id="cart-items"></div>
+  <div id="cart-items"></div>
 
-    <br>
-    <h3 id="cart-total"></h3>
+  <br>
+  <h3 id="cart-total"></h3>
 
-    <br>
-    <button onclick="checkout()" style="background:green;color:white;padding:10px 20px;border:none;cursor:pointer;">
-        Checkout All
-    </button>
+  <br>
+  <button id="btnCheckoutAll" style="background:green;color:white;padding:10px 20px;border:none;cursor:pointer;">
+    Checkout All
+  </button>
 </section>
 
-<script>
+<script type="module">
+  import { requireAuth, setupLogout } from "./auth-guard.js";
+  import { getCart, setCart, updateCartCount } from "./cart.js";
 
-// 🔐 PROTECT PAGE
-if(localStorage.getItem("isLoggedIn") !== "true"){
-    window.location.href = "login.html";
-}
+  // ✅ Protect page (Firebase)
+  await requireAuth();
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  // ✅ Logout (Firebase)
+  setupLogout({ linkId: "logoutLink", redirectTo: "index.html" });
 
-function updateCartCount(){
-    document.getElementById("cart-count").innerText = cart.length;
-}
+  let cart = getCart();
 
-function renderCart(){
+  function renderCart() {
     const container = document.getElementById("cart-items");
     container.innerHTML = "";
+
     let total = 0;
 
     cart.forEach((item, index) => {
-        total += item.price;
+      total += Number(item.price || 0);
 
-        container.innerHTML += `
-            <div style="background:white;padding:15px;margin-bottom:10px;border-radius:8px;">
-                
-                ${item.image ? `
-                <img src="${item.image}" 
-                style="width:80px;height:80px;object-fit:cover;border-radius:6px;margin-bottom:10px;">
-                <br>
-                ` : ""}
+      container.innerHTML += `
+        <div style="background:white;padding:15px;margin-bottom:10px;border-radius:8px;">
+          ${item.image ? `
+            <img src="${item.image}"
+              style="width:80px;height:80px;object-fit:cover;border-radius:6px;margin-bottom:10px;">
+            <br>
+          ` : ""}
 
-                <strong>${item.name}</strong> - ₱${item.price}
-                <br><br>
+          <strong>${item.name}</strong> - ₱${item.price}
+          <br><br>
 
-                <button onclick="removeItem(${index})"
-                    style="background:red;color:white;border:none;padding:6px 12px;">
-                    Remove
-                </button>
+          <button data-remove="${index}"
+            style="background:red;color:white;border:none;padding:6px 12px;cursor:pointer;">
+            Remove
+          </button>
 
-                <button onclick="checkoutSingle(${index})"
-                    style="background:blue;color:white;border:none;padding:6px 12px;">
-                    Checkout This
-                </button>
-            </div>
-        `;
+          <button data-checkout="${index}"
+            style="background:blue;color:white;border:none;padding:6px 12px;cursor:pointer;">
+            Checkout This
+          </button>
+        </div>
+      `;
     });
 
     document.getElementById("cart-total").innerText = "Total: ₱" + total;
-}
 
-function removeItem(index){
-    cart.splice(index,1);
-    localStorage.setItem("cart", JSON.stringify(cart));
+    // Wire buttons (event delegation)
+    container.querySelectorAll("[data-remove]").forEach(btn => {
+      btn.addEventListener("click", () => removeItem(Number(btn.dataset.remove)));
+    });
+
+    container.querySelectorAll("[data-checkout]").forEach(btn => {
+      btn.addEventListener("click", () => checkoutSingle(Number(btn.dataset.checkout)));
+    });
+  }
+
+  function syncCart() {
+    setCart(cart);
+    updateCartCount("cart-count");
     renderCart();
-    updateCartCount();
-}
+  }
 
-function checkoutSingle(index){
+  function removeItem(index) {
+    cart.splice(index, 1);
+    syncCart();
+  }
+
+  function checkoutSingle(index) {
+    if (!cart[index]) return;
     alert(cart[index].name + " checked out!");
-    cart.splice(index,1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
-    updateCartCount();
-}
+    cart.splice(index, 1);
+    syncCart();
+  }
 
-function checkout(){
-    if(cart.length === 0){
-        alert("Cart is empty!");
-        return;
+  function checkoutAll() {
+    if (cart.length === 0) {
+      alert("Cart is empty!");
+      return;
     }
 
     alert("All items checked out!");
     cart = [];
-    localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
-    updateCartCount();
-}
+    syncCart();
+  }
 
-function logout(){
-    localStorage.removeItem("isLoggedIn");
-    window.location.href = "index.html";
-}
+  // Checkout all button
+  document.getElementById("btnCheckoutAll").addEventListener("click", checkoutAll);
 
-updateCartCount();
-renderCart();
-
+  // Initial render
+  updateCartCount("cart-count");
+  renderCart();
 </script>
 
 </body>

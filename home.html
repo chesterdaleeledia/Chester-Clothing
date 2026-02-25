@@ -87,12 +87,6 @@
       signOut
     } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-    // Protect page: if not logged in, balik sa login
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-      }
-    });
 
     // Real logout
     const logoutLink = document.getElementById("logoutLink");

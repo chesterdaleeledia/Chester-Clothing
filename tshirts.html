@@ -1,82 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>T-Shirts</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>T-Shirts - Chester Clothing</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header>
-
-    <div class="page-title">
-        T-shirts
-    </div>
+  <header>
+    <div class="page-title">T-shirts</div>
 
     <nav class="nav-right">
+      <a href="home.html" class="nav-link">Home</a>
+      <a href="about.html">About</a>
 
-        <a href="home.html" class="nav-link">Home</a>
-        <a href="about.html">About</a>
-        <a href="cart.html" class="nav-link">
-           🛒 Cart <span id="cart-count">0</span>
-        </a>
-          </a>
-           <a href="login.html" class="nav-link">
-            Log out 
-        </a>
+      <a href="cart.html" class="nav-link">
+        🛒 Cart <span id="cart-count">0</span>
+      </a>
+
+      <!-- REAL logout (Firebase) -->
+      <a href="#" id="logoutLink" class="nav-link">Log out</a>
     </nav>
+  </header>
 
-</header>
-
-<section class="products">
-
+  <section class="products">
     <div class="card">
-        <img src="assets/black tshirt.jpg" class="product-img">
-        <h3>Black Tee</h3>
-        <p>₱499</p>
-        <button onclick="addToCart('Black Tee', 499)">
-            Add to Cart
-        </button>
+      <img src="assets/black tshirt.jpg" class="product-img" alt="Black Tee">
+      <h3>Black Tee</h3>
+      <p>₱499</p>
+      <button onclick="addToCart('Black Tee', 499)">
+        Add to Cart
+      </button>
     </div>
 
     <div class="card">
-        <img src="assets/white tshirt.jpg" class="product-img">
-        <h3>White Tee</h3>
-        <p>₱549</p>
-        <button onclick="addToCart('White Tee', 549)">
-            Add to Cart
-        </button>
+      <img src="assets/white tshirt.jpg" class="product-img" alt="White Tee">
+      <h3>White Tee</h3>
+      <p>₱549</p>
+      <button onclick="addToCart('White Tee', 549)">
+        Add to Cart
+      </button>
     </div>
+  </section>
 
-</section>
+  <!-- ✅ CONSISTENT AUTH + CART (shared modules) -->
+  <script type="module">
+    import { requireAuth, setupLogout } from "./auth-guard.js";
+    import { updateCartCount } from "./cart.js";
 
-<!-- JAVASCRIPT ALWAYS AT BOTTOM -->
-<script>
+    // Protect page (Firebase)
+    await requireAuth();
 
-// 🔐 PROTECT PAGE
-if(localStorage.getItem("isLoggedIn") !== "true"){
-    window.location.href = "login.html";
-}
+    // Wire logout to Firebase signOut
+    setupLogout({ linkId: "logoutLink", redirectTo: "index.html" });
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-// UPDATE CART COUNT
-function updateCartCount(){
-    document.getElementById("cart-count").innerText = cart.length;
-}
-
-// ADD TO CART
-function addToCart(name, price){
-    cart.push({name:name, price:price});
-    localStorage.setItem("cart", JSON.stringify(cart));
-    updateCartCount();
-    alert(name + " added to cart!");
-}
-
-
-
-updateCartCount();
-
-</script>
+    // Update cart count
+    updateCartCount("cart-count");
+  </script>
 
 </body>
 </html>

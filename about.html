@@ -1,50 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>About - Chester Apparel</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - Chester Apparel</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header>
-    <div class="brand">CHESTER APPAREL</div>
-    <nav>
-        <a href="home.html">Home</a>
-        <a href="signup.html">Sign Up</a>
-        <a href="login.html" class="nav-btn">Login</a>
-    </nav>
+  <div class="brand">CHESTER APPAREL</div>
+
+  <nav class="nav-right">
+    <a href="home.html" class="nav-link">Home</a>
+
+    <a href="cart.html" class="nav-link">
+      🛒 Cart <span id="cart-count">0</span>
+    </a>
+
+    <!-- REAL logout (Firebase) -->
+    <a href="#" id="logoutLink" class="nav-link">Log out</a>
+  </nav>
 </header>
 
-
-
-
 <section class="hero">
+  <div class="hero-overlay"></div>
 
-    <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>About Us</h1>
+    <p>
+      Chester Apparel is built for confidence and modern fashion.
+      We create pieces that define your personality.
+      <br><br><br><br><br><br>
 
-    <div class="hero-content">
-        <h1>About Us</h1>
-        <p>
-            Chester Apparel is built for confidence and modern fashion.
-            We create pieces that define your personality.
-
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-             Chester Apparel is a modern fashion brand focused on
-        streetwear and everyday essentials.
-        We believe fashion should be bold, confident, and accessible.
+      Chester Apparel is a modern fashion brand focused on
+      streetwear and everyday essentials.
+      We believe fashion should be bold, confident, and accessible.
       <br><br><br><br><br>
-        <i>"Designed with passion, Built for style"</i>
-    </p>
-        </p>
-    </div>
 
+      <i>"Designed with passion, Built for style"</i>
+    </p>
+  </div>
 </section>
+
+<script type="module">
+  import { requireAuth, setupLogout } from "./auth-guard.js";
+  import { updateCartCount } from "./cart.js";
+
+  await requireAuth(); // protect page
+  setupLogout({ linkId: "logoutLink", redirectTo: "index.html" });
+  updateCartCount("cart-count");
+</script>
 
 </body>
 </html>

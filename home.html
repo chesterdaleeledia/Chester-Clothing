@@ -1,112 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Home - Chester Clothing</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home - Chester Clothing</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
+<body>
 
-
-<header>
-
-    <div class="page-title">
-        Home
-    </div>
+  <header>
+    <div class="page-title">Home</div>
 
     <nav class="nav-right">
-        <a href="about.html">About</a>
-        <a href="cart.html" class="nav-link">
-          🛒  Cart <span id="cart-count">0</span>
-        </a>
-          <a href="login.html" class="nav-link">
-            Log out 
-        </a>
+      <a href="about.html">About</a>
+
+      <a href="cart.html" class="nav-link">
+        🛒 Cart <span id="cart-count">0</span>
+      </a>
+
+      <!-- REAL logout -->
+      <a href="#" id="logoutLink" class="nav-link">Log out</a>
     </nav>
+  </header>
 
-</header>
-
-<section class="hero">
-
+  <section class="hero">
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
-        <h1>Welcome Back</h1>
-        <p>Choose your category below</p>
+      <h1>Welcome Back</h1>
+      <p>Choose your category below</p>
     </div>
+  </section>
 
-</section>
-
-
-<section class="categories">
-
+  <section class="categories">
     <a href="tshirts.html" class="category-card">
-        <img src="assets/black tshirt.jpg">
-        <h3>T-Shirts</h3>
+      <img src="assets/black tshirt.jpg" alt="T-Shirts">
+      <h3>T-Shirts</h3>
     </a>
 
-  <a href="jeans.html" class="category-card">
-    <img src="assets/jeans.jpg">
-    <h3>Jeans</h3>
-</a>
+    <a href="jeans.html" class="category-card">
+      <img src="assets/jeans.jpg" alt="Jeans">
+      <h3>Jeans</h3>
+    </a>
 
-<a href="caps.html" class="category-card">
-    <img src="assets/black-baseball-cap-classic-style-versatile-wear_191095-80307.jpg">
-    <h3>Caps</h3>
-</a>
+    <a href="caps.html" class="category-card">
+      <img src="assets/black-baseball-cap-classic-style-versatile-wear_191095-80307.jpg" alt="Caps">
+      <h3>Caps</h3>
+    </a>
 
-<a href="socks.html" class="category-card">
-    <img src="assets/socks.jpg">
-    <h3>Socks</h3>
-</a>
+    <a href="socks.html" class="category-card">
+      <img src="assets/socks.jpg" alt="Socks">
+      <h3>Socks</h3>
+    </a>
+  </section>
 
+  <!-- ========== LOCAL CART SCRIPT (OK LANG LOCALSTORAGE) ========== -->
+  <script>
+    // CART (localStorage) — safe to keep
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
+    function updateCartCount() {
+      const el = document.getElementById("cart-count");
+      if (el) el.innerText = cart.length;
+    }
 
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+      alert(name + " added to cart!");
+    }
 
-</section>
-
-
-
-
-<!-- JAVASCRIPT ALWAYS AT BOTTOM -->
-<script>
-
-// 🔐 PROTECT PAGE
-if(localStorage.getItem("isLoggedIn") !== "true"){
-    window.location.href = "login.html";
-}
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-// UPDATE CART COUNT
-function updateCartCount(){
-    document.getElementById("cart-count").innerText = cart.length;
-}
-
-// ADD TO CART
-function addToCart(name, price){
-    cart.push({name:name, price:price});
-    localStorage.setItem("cart", JSON.stringify(cart));
     updateCartCount();
-    alert(name + " added to cart!");
-}
 
-// LOGOUT FUNCTION
-function logout(){
-    localStorage.removeItem("isLoggedIn");
-    window.location.href = "index.html";
-}
+    // NOTE: Old login flag cleanup (optional)
+    // If you used old system before, you can remove it once:
+    // localStorage.removeItem("isLoggedIn");
+  </script>
 
-updateCartCount();
+  <!-- ========== FIREBASE AUTH GUARD + LOGOUT ========== -->
+  <script type="module">
+    import { auth } from "./firebase.js";
+    import {
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-</script>
-<script type="module">
-  import { auth } from "./firebase.js";
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+    // Protect page: if not logged in, balik sa login
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user) window.location.href = "login.html";
-  });
-</script>
+    // Real logout
+    const logoutLink = document.getElementById("logoutLink");
+    if (logoutLink) {
+      logoutLink.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          await signOut(auth);
+        } finally {
+          window.location.href = "index.html"; // or "login.html"
+        }
+      });
+    }
+  </script>
 
 </body>
 </html>

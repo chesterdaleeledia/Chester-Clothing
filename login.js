@@ -1,22 +1,17 @@
 import { auth, db } from "./firebase.js";
-
-import {
-  signInWithEmailAndPassword,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-
-import {
-  doc,
-  getDoc,
-  setDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+import { getNextFromUrl } from "./auth-guard.js";
 
 const form = document.getElementById("loginForm");
 const msg = document.getElementById("msg");
 const btn = document.getElementById("btnLogin");
 
+const nextPage = getNextFromUrl(); // e.g. caps.html, tshirts.html, etc.
+let redirected = false;
+
 function showMsg(text, ok = true) {
+  if (!msg) return alert(text);
   msg.style.display = "block";
   msg.textContent = text;
   msg.style.border = ok ? "1px solid #6ee7b7" : "1px solid #fca5a5";
@@ -24,61 +19,53 @@ function showMsg(text, ok = true) {
 }
 
 function setLoading(isLoading) {
+  if (!btn) return;
   btn.disabled = isLoading;
   btn.textContent = isLoading ? "Logging in..." : "Login";
 }
 
-// read ?next=...
-const params = new URLSearchParams(window.location.search);
-const next = params.get("next") || "home.html";
+function goNext() {
+  if (redirected) return;
+  redirected = true;
+  window.location.href = nextPage || "home.html";
+}
 
-let redirected = false;
-
-// If already logged in, redirect to next (not always home)
+// If already logged in, go directly to next (NOT always home)
 onAuthStateChanged(auth, (user) => {
-  if (user && !redirected) {
-    redirected = true;
-    window.location.href = next;
-  }
+  if (user) goNext();
 });
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+if (!form) {
+  console.error("loginForm not found. Check login.html IDs.");
+} else {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-  if (!email || !password) return showMsg("Please enter email and password.", false);
+    if (!email || !password) return showMsg("Please enter email and password.", false);
 
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const cred = await signInWithEmailAndPassword(auth, email, password);
-    const uid = cred.user.uid;
+      const cred = await signInWithEmailAndPassword(auth, email, password);
 
-    // optional: update last login
-    await setDoc(doc(db, "users", uid), { lastLoginAt: serverTimestamp() }, { merge: true });
+      await setDoc(doc(db, "users", cred.user.uid), {
+        lastLoginAt: serverTimestamp()
+      }, { merge: true });
 
-    // optional: fetch profile
-    const snap = await getDoc(doc(db, "users", uid));
-    if (snap.exists()) localStorage.setItem("userProfile", JSON.stringify(snap.data()));
+      const snap = await getDoc(doc(db, "users", cred.user.uid));
+      if (snap.exists()) localStorage.setItem("userProfile", JSON.stringify(snap.data()));
 
-    showMsg("Login successful ✅ Redirecting...", true);
+      showMsg("Login successful ✅ Redirecting...", true);
+      setTimeout(goNext, 250);
 
-    redirected = true;
-    setTimeout(() => window.location.href = next, 400);
-
-  } catch (err) {
-    console.error(err);
-    const code = err?.code || "";
-
-    let text = "Login failed.";
-    if (code === "auth/invalid-credential") text = "Wrong email or password.";
-    else if (code === "auth/invalid-email") text = "Invalid email format.";
-    else if (err?.message) text = err.message;
-
-    showMsg(text, false);
-  } finally {
-    setLoading(false);
-  }
-});
+    } catch (err) {
+      console.error(err);
+      showMsg("Wrong email or password.", false);
+    } finally {
+      setLoading(false);
+    }
+  });
+}
